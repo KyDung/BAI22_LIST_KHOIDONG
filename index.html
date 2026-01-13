@@ -336,10 +336,20 @@
           }
           const duration = (Date.now() - startTime) / 1000;
 
-          let actualScore = 0;
+          // Tính điểm: đúng - sai (để tránh học sinh chọn tất cả)
+          let correctSelections = 0;
+          let wrongSelections = 0;
+          
           leftSelected.forEach((idx) => {
-            if (scores[idx] > 7) actualScore++;
+            if (scores[idx] > 7) {
+              correctSelections++;  // Chọn đúng: thùng có > 7 quả
+            } else {
+              wrongSelections++;    // Chọn sai: thùng có <= 7 quả
+            }
           });
+
+          // Điểm = số đúng - số sai (không cho điểm âm)
+          const actualScore = Math.max(0, correctSelections - wrongSelections);
 
           try {
             await db.collection("submissions").add({
