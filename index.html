@@ -339,12 +339,12 @@
           // Tính điểm: đúng - sai (để tránh học sinh chọn tất cả)
           let correctSelections = 0;
           let wrongSelections = 0;
-          
+
           leftSelected.forEach((idx) => {
             if (scores[idx] > 7) {
-              correctSelections++;  // Chọn đúng: thùng có > 7 quả
+              correctSelections++; // Chọn đúng: thùng có > 7 quả
             } else {
-              wrongSelections++;    // Chọn sai: thùng có <= 7 quả
+              wrongSelections++; // Chọn sai: thùng có <= 7 quả
             }
           });
 
@@ -417,6 +417,24 @@
         const handleResetStep1 = () => {
           setCreatedBoxes([]);
           setUsedScoreIndices(new Set());
+          setMessage("");
+        };
+
+        const handleRemoveBox = () => {
+          if (hasSubmitted || isSubmitting || createdBoxes.length === 0) return;
+
+          // Xóa thùng cuối cùng
+          const lastBox = createdBoxes[createdBoxes.length - 1];
+          const newBoxes = createdBoxes.slice(0, -1);
+
+          // Nếu thùng bị xóa có giá trị, trả lại rổ cam
+          if (lastBox.scoreIndex !== null) {
+            const newUsedIndices = new Set(usedScoreIndices);
+            newUsedIndices.delete(lastBox.scoreIndex);
+            setUsedScoreIndices(newUsedIndices);
+          }
+
+          setCreatedBoxes(newBoxes);
           setMessage("");
         };
 
@@ -1063,14 +1081,26 @@
                         </div>
                       </div>
 
-                      {/* Nút Thêm biến và Reset */}
+                      {/* Nút Thêm thùng, Xóa thùng và Reset */}
                       <div className="flex gap-2 mb-4">
                         <button
                           onClick={handleAddBox}
                           disabled={hasSubmitted || isSubmitting}
                           className="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg font-bold flex items-center justify-center gap-2"
                         >
-                          <Icon name="plus" size={20} /> Thêm biến
+                          <Icon name="plus" size={20} /> Thêm thùng
+                        </button>
+                        <button
+                          onClick={handleRemoveBox}
+                          disabled={
+                            hasSubmitted ||
+                            isSubmitting ||
+                            createdBoxes.length === 0
+                          }
+                          className="bg-orange-500 hover:bg-orange-600 text-white py-2 px-4 rounded-lg font-bold flex items-center justify-center gap-2"
+                          title="Xóa thùng cuối cùng"
+                        >
+                          <Icon name="minus" size={20} />
                         </button>
                         <button
                           onClick={handleResetStep1}
@@ -1080,6 +1110,7 @@
                             createdBoxes.length === 0
                           }
                           className="bg-gray-400 hover:bg-gray-500 text-white py-2 px-4 rounded-lg font-bold"
+                          title="Xóa tất cả thùng"
                         >
                           <Icon name="refresh-cw" size={20} />
                         </button>
