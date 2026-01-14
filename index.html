@@ -1219,15 +1219,20 @@
                           }
                         `}
                               style={{
-                                backgroundImage: 'url(box.png)',
-                                backgroundSize: 'cover',
-                                backgroundPosition: 'center'
+                                backgroundImage: "url(box.png)",
+                                backgroundSize: "cover",
+                                backgroundPosition: "center",
                               }}
                             >
                               <span className="text-[9px] text-gray-600 font-bold absolute top-0.5 left-1 bg-white/70 px-1 rounded">
                                 T{idx}
                               </span>
-                              <span className="text-2xl font-bold" style={{textShadow: '0 0 4px white, 0 0 8px white'}}>
+                              <span
+                                className="text-2xl font-bold"
+                                style={{
+                                  textShadow: "0 0 4px white, 0 0 8px white",
+                                }}
+                              >
                                 {score}
                               </span>
                             </button>
